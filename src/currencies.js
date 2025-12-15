@@ -39,10 +39,20 @@ export class CurrencyManager {
     }
   }
 
-  get generatorCost() { return Math.ceil(10 * Math.pow(1.15, this.generators)); }
-  get clickUpgradeCost() { return Math.ceil(250 * Math.pow(1.8, this.clickPower / 2 - 1)); }
-  get generatorUpgradeCost() { return Math.ceil(500 * Math.pow(2, this.generatorMultiplier / 2 - 1)); }
+  get generatorCost() { 
+    return Math.ceil(10 * Math.pow(1.15, this.generators)); 
+  }
+  
+  get clickUpgradeCost() { 
+    return Math.ceil(250 * Math.pow(1.8, this.clickPower / 2 - 1)); 
+  }
+  
+  get generatorUpgradeCost() { 
+    return Math.ceil(500 * Math.pow(2, this.generatorMultiplier / 2 - 1)); 
+  }
 
   get points() { return Math.floor(this.value); }
-  get productionPerSecond() { return this.generators * this.baseProduction * this.generatorMultiplier; }
+  get productionPerSecond() { 
+    return this.generators * this.baseProduction * this.generatorMultiplier; 
+  }
 }
