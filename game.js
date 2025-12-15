@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="layers-container"></div>
   `;
 
-  // Event Handler
+  // Event Handler 
   document.getElementById('click-btn').onclick = () => game.currencies.click();
   document.getElementById('buy-generator-btn').onclick = () => game.currencies.buyGenerator();
   document.getElementById('buy-click-upgrade-btn').onclick = () => game.currencies.buyClickUpgrade();
