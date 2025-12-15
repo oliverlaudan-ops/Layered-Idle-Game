@@ -1,10 +1,16 @@
 export function updateUI(game) {
   const currencies = game.currencies;
 
-  document.getElementById('currency-display').textContent =
+  const currencyDisplay = document.getElementById('currency-display');
+  const generatorsDiv = document.getElementById('generators-container');
+
+  if (!currencyDisplay || !generatorsDiv) {
+    return;
+  }
+
+  currencyDisplay.textContent =
     `Punkte: ${currencies.points} (Prod: ${currencies.productionPerSecond}/s)`;
 
-  const generatorsDiv = document.getElementById('generators-container');
   const cost = currencies.generatorCost;
 
   generatorsDiv.innerHTML = `
@@ -15,7 +21,9 @@ export function updateUI(game) {
 
   const buyBtn = document.getElementById('buy-generator-btn');
   if (buyBtn) {
-    buyBtn.onclick = () => currencies.buyGenerator();
+    buyBtn.onclick = () => {
+      currencies.buyGenerator();
+    };
     buyBtn.disabled = currencies.points < cost;
   }
 }
