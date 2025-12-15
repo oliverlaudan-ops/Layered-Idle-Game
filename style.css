@@ -47,6 +47,25 @@ body {
   color: var(--muted);
 }
 
+#upgrades-container {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+#upgrades-info > div {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#upgrades-info button {
+  flex: 1;
+  font-size: 0.85rem;
+}
+
+
 button {
   background: var(--accent-soft);
   color: var(--text);
