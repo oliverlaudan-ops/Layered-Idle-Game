@@ -17,24 +17,24 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="click-btn" type="button">Klicken (+1)</button>
 
     <div id="generators-container">
-      <div id="generators-info" style="margin-bottom :10px"></div>
+      <div id="generators-info"></div>
       <button id="buy-generator-btn" type="button">Generator kaufen</button>
     </div>
+
     <div id="upgrades-container">
-    <div id="upgrades-info"></div>
+      <div id="upgrades-info"></div>
     </div>
-    
+
     <div id="layers-container"></div>
   `;
 
+  // Event Handler
   document.getElementById('click-btn').onclick = () => game.currencies.click();
   document.getElementById('buy-generator-btn').onclick = () => game.currencies.buyGenerator();
   document.getElementById('buy-click-upgrade-btn').onclick = () => game.currencies.buyClickUpgrade();
   document.getElementById('buy-generator-upgrade-btn').onclick = () => game.currencies.buyGeneratorUpgrade();
 
-  // Erstes UI-Update
   updateUI(game);
-
   const gameLoop = startGameLoop(game, updateUI);
   requestAnimationFrame(gameLoop);
 });
