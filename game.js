@@ -8,6 +8,8 @@ export const game = {
   layers: new LayerManager()
 };
 
+window.game = game; // zum Debuggen in der Konsole
+
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('game-container');
   container.innerHTML = `
@@ -18,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
 
   document.getElementById('click-btn').onclick = () => game.currencies.click();
+
+  // erstes UI-Render, bevor die Schleife läuft
+  updateUI(game);
 
   const gameLoop = startGameLoop(game, updateUI);
   requestAnimationFrame(gameLoop);
