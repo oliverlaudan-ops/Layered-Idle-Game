@@ -10,12 +10,33 @@ export class CurrencyManager {
     points.value += points.generators * points.baseProduction * deltaTime;
   }
 
-  addGenerator(amount = 1) {
-    this.currencies.points.generators += amount;
+  // Klick gibt temporäre Punkte
+  click() {
+    this.currencies.points.value += 1;
+  }
+
+  // Generator kaufen (nicht mehr addGenerator für Klick)
+  buyGenerator(amount = 1) {
+    const cost = this.generatorCost();
+    if (this.currencies.points.value >= cost) {
+      this.currencies.points.value -= cost;
+      this.currencies.points.generators += amount;
+    }
+  }
+
+  generatorCost() {
+    return Math.floor((this.currencies.points.generators + 1) * 10);
   }
 
   get points() {
     return this.currencies.points.value.toFixed(0);
   }
-}
 
+  get generators() {
+    return this.currencies.points.generators.toFixed(1);
+  }
+
+  get productionPerSecond() {
+    return (this.currencies.points.generators * this.currencies.points.baseProduction).toFixed(1);
+  }
+}
