@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('game-container');
   container.innerHTML = `
     <div id="currency-display">Punkte: 0</div>
-    <button id="click-btn">Klicken (+1)</button>
+    <button id="click-btn" type="button">Klicken (+1)</button>
     <div id="generators-container"></div>
     <div id="layers-container"></div>
   `;
