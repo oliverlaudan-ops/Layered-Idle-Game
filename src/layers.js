@@ -3,26 +3,27 @@ export class LayerManager {
     this.layers = [
       {
         id: 1,
-        name: "Basis Layer",
+        name: "Points",
+        currency: 'points',  // Verweis auf Layer 1 CurrencyManager
         unlocked: true,
-        unlockRequirement: 0,
-        generators: []
+        generators: [],
+        unlockRequirement: 0
       },
       {
         id: 2,
-        name: "Prestige Layer", 
+        name: "Prestige Coins", 
+        currency: new CurrencyManager(),  // EIGENE CurrencyManager!
         unlocked: false,
-        unlockRequirement: 1000,
+        unlockRequirement: 10,  // 10 Prestige Points
         generators: []
       }
     ];
-    this.currentLayer = 1;
   }
 
   checkUnlocks() {
-    const points = game.currencies.points;
+    const prestigePoints = game.currencies.prestigePoints;
     this.layers.forEach(layer => {
-      if (!layer.unlocked && points >= layer.unlockRequirement) {
+      if (!layer.unlocked && prestigePoints >= layer.unlockRequirement) {
         layer.unlocked = true;
       }
     });
@@ -31,5 +32,9 @@ export class LayerManager {
   get unlockedLayers() {
     return this.layers.filter(layer => layer.unlocked);
   }
-}
 
+  getCurrentLayerCurrency(layerId) {
+    const layer = this.layers.find(l => l.id === layerId);
+    return layer ? layer.currency : null;
+  }
+}
