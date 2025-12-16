@@ -54,6 +54,16 @@ export class CurrencyManager {
     }
   }
 
+  // In CurrencyManager prestigeGain erweitern:
+  get prestigeGain() {
+    const baseGain = Math.floor(Math.sqrt(this.value / 1000));
+    // Layer 2 multipliziert Prestige-Gewinn!
+    const layer2Currency = game.layers.getCurrentLayerCurrency(2);
+    const layer2Multiplier = layer2Currency ? layer2Currency.value / 10 + 1 : 1;
+    return Math.floor(baseGain * layer2Multiplier);
+  }
+
+
   update(deltaTime) {
     // ALLE Produktionen * Prestige-Multi
     this.value += this.generators * this.baseProduction * this.generatorMultiplier * this.prestigeMultiplier * deltaTime;
