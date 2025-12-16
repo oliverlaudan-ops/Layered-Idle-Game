@@ -1,24 +1,26 @@
 export function updateUI(game) {
   const currencies = game.currencies;
 
-  // 1. Klick-Button Text mit aktueller Klick-Power
+  // 1. Klick-Button: Prestige-Multiplier einbeziehen
   const clickBtn = document.getElementById('click-btn');
-  clickBtn.textContent = `Klicken (+${currencies.clickPower.toFixed(1)})`; // ✅ dynamisch!
+  const effectiveClickPower = currencies.clickPower * currencies.prestigeMultiplier;
+  clickBtn.textContent = `Klicken (+${effectiveClickPower.toFixed(1)})`; // ✅ 1.5 bei Prestige 5
 
-  // 2. Currency Display
+  // 2. Currency Display: Gesamt-Prod inkl. Prestige
   document.getElementById('currency-display').textContent =
     `Punkte: ${currencies.points} (Prod: ${currencies.productionPerSecond}/s)`;
 
-  // 3. Generators Info mit Multiplier
+  // 3. Generators: EFFektive Produktion pro Generator zeigen
   const generatorsInfo = document.getElementById('generators-info');
   const genCost = currencies.generatorCost;
+  const effectiveGenProd = currencies.baseProduction * currencies.generatorMultiplier * currencies.prestigeMultiplier;
   generatorsInfo.textContent = 
-    `Generatoren: ${currencies.generators} (je ${currencies.baseProduction * currencies.generatorMultiplier}/s) — Kosten: ${genCost}`; // ✅ Multiplier!
+    `Generatoren: ${currencies.generators} (je ${effectiveGenProd.toFixed(1)}/s) — Kosten: ${genCost}`;
 
-  // 4. Generator Button disabled
+  // 4. Generator Button
   document.getElementById('buy-generator-btn').disabled = currencies.points < genCost;
 
-  // 5. Upgrade Buttons Text + disabled
+  // 5. Upgrade Buttons
   const clickUpgradeBtn = document.getElementById('buy-click-upgrade-btn');
   clickUpgradeBtn.textContent = `Klick x2 (Kosten: ${currencies.clickUpgradeCost})`;
   clickUpgradeBtn.disabled = currencies.points < currencies.clickUpgradeCost;
@@ -32,21 +34,19 @@ export function updateUI(game) {
   upgradesInfo.innerHTML = `
     <div>Klick-Power: x${currencies.clickPower.toFixed(1)}</div>
     <div>Generator-Multi: x${currencies.generatorMultiplier.toFixed(1)}</div>
+    <div><strong>Prestige Multi: x${currencies.prestigeMultiplier.toFixed(2)}</strong></div>
   `;
 
-  // 7. Prestige
+  // 7. Prestige (deine Implementierung)
   const prestigeInfo = document.getElementById('prestige-info');
   const prestigeBtn = document.getElementById('prestige-btn');
-  
   prestigeInfo.innerHTML = `
     <div>Prestige Points: ${currencies.prestigePoints}</div>
-    <div>Prestige Multi: x${currencies.prestigeMultiplier.toFixed(2)}</div>
     <div>Gewinn beim Reset: ${currencies.prestigeGain}</div>
   `;
-  
   prestigeBtn.textContent = `Prestige Reset (+${currencies.prestigeGain})`;
   prestigeBtn.disabled = currencies.prestigeGain <= 0;
 
-  // Layers
+  // 8. Layers Container (noch leer)
   document.getElementById('layers-container').innerHTML = '';
 }
