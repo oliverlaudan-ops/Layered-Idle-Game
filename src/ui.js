@@ -48,23 +48,43 @@ export function updateUI(game) {
   prestigeBtn.disabled = currencies.prestigeGain <= 0;
 
   // 8. Layers Container 
-  const layersContainer = document.getElementById('layers-container');
-  const layers = game.layers.unlockedLayers;
-  
-  layersContainer.innerHTML = layers
-    .filter(l => l.id === 2) // nur Layer 2 anzeigen
-    .map(layer => {
-      const c = layer.currency;
-      return `
-        <div class="layer-section">
-          <h3>Layer ${layer.id}: ${layer.name}</h3>
-          <div>Coins: ${c.points} (${c.totalProductionPerSecond?.toFixed ? c.totalProductionPerSecond.toFixed(1) : 0}/s)</div>
-          <button type="button" onclick="game.layers.getCurrencyForLayer(${layer.id}).buyGenerator()">
-            Generator kaufen (${c.generatorCost})
-          </button>
-        </div>
-      `;
-    })
-    .join('') || '<div>Neue Layers werden freigeschaltet…</div>';
+const layersContainer = document.getElementById('layers-container');
+if (!layersContainer) return;
+
+const layers = game.layers.unlockedLayers;
+
+// Wenn nur Layer 1 frei ist → Hinweis anzeigen
+if (layers.length <= 1) {
+  layersContainer.innerHTML = '<div>Neue Layers werden freigeschaltet…</div>';
+  return;
+}
+
+// Layer 2 (und später evtl. weitere) anzeigen
+layersContainer.innerHTML = layers
+  .filter(l => l.id === 2) // nur Layer 2 anzeigen
+  .map(layer => {
+    const c = layer.currency;
+
+    const points = (typeof c.points === 'number') ? c.points : 0;
+    const prod = typeof c.totalProductionPerSecond === 'number'
+      ? c.totalProductionPerSecond.toFixed(1)
+      : (typeof c.productionPerSecond === 'number'
+          ? c.productionPerSecond.toFixed(1)
+          : '0.0');
+
+    const cost = typeof c.generatorCost === 'number' ? c.generatorCost : 0;
+
+    return `
+      <div class="layer-section">
+        <h3>Layer ${layer.id}: ${layer.name}</h3>
+        <div>Coins: ${points} (${prod}/s)</div>
+        <button type="button" onclick="game.layers.getCurrencyForLayer(${layer.id}).buyGenerator()">
+          Generator kaufen (${cost})
+        </button>
+      </div>
+    `;
+  })
+  .join('');
+
 
 }
