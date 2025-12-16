@@ -65,6 +65,20 @@ body {
   font-size: 0.85rem;
 }
 
+#prestige-container {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--accent);
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+#prestige-btn {
+  background: var(--accent);
+  font-weight: 600;
+  font-size: 1rem;
+}
 
 button {
   background: var(--accent-soft);
