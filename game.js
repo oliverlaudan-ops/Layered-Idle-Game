@@ -12,6 +12,7 @@ export const game = {
 window.game = game;
 
 document.addEventListener('DOMContentLoaded', () => {
+  loadGame(); // ✅ vorhandenen Spielstand laden
   const container = document.getElementById('game-container');
  container.innerHTML = `
   <div id="currency-display">Punkte: 0</div>
@@ -48,6 +49,9 @@ document.getElementById('prestige-btn').onclick = () => game.currencies.prestige
   updateUI(game);
   const gameLoop = startGameLoop(game, updateUI);
   requestAnimationFrame(gameLoop);
+
+  // Autosave alle 5 Sekunden
+  setInterval(saveGame, 5000);
 });
 
 function saveGame() {
