@@ -47,6 +47,23 @@ export function updateUI(game) {
   prestigeBtn.textContent = `Prestige Reset (+${currencies.prestigeGain})`;
   prestigeBtn.disabled = currencies.prestigeGain <= 0;
 
-  // 8. Layers Container (noch leer)
-  document.getElementById('layers-container').innerHTML = '';
+  // 8. Layers Container 
+  const layersContainer = document.getElementById('layers-container');
+  const layers = game.layers;
+  const unlockedLayers = layers.unlockedLayers;
+  
+  if (unlockedLayers.length > 1) {
+    layersContainer.innerHTML = unlockedLayers.map(layer => `
+      <div class="layer-section">
+        <h3>Layer ${layer.id}: ${layer.name}</h3>
+        <div>${layer.currency.points} (${layer.currency.totalProductionPerSecond.toFixed(1)}/s)</div>
+        <button onclick="game.layers.layers[${layer.id-1}].currency.buyGenerator()">
+          Generator kaufen (${layer.currency.generatorCost})
+        </button>
+      </div>
+    `).join('');
+  } else {
+    layersContainer.innerHTML = '<div>Neue Layers werden freigeschaltet...</div>';
+  }
+
 }
