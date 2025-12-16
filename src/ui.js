@@ -34,6 +34,20 @@ export function updateUI(game) {
     <div>Generator-Multi: x${currencies.generatorMultiplier.toFixed(1)}</div>
   `;
 
+  // 7. Prestige
+  const prestigeInfo = document.getElementById('prestige-info');
+  const prestigeBtn = document.getElementById('prestige-btn');
+  const currencies = game.currencies;
+  
+  prestigeInfo.innerHTML = `
+    <div>Prestige Points: ${currencies.prestigePoints}</div>
+    <div>Prestige Multi: x${currencies.prestigeMultiplier.toFixed(2)}</div>
+    <div>Gewinn beim Reset: ${currencies.prestigeGain}</div>
+  `;
+  
+  prestigeBtn.textContent = `Prestige Reset (+${currencies.prestigeGain})`;
+  prestigeBtn.disabled = currencies.prestigeGain <= 0;
+
   // Layers
   document.getElementById('layers-container').innerHTML = '';
 }
