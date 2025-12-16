@@ -74,6 +74,20 @@ body {
   padding: 16px;
 }
 
+.layer-section {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.layer-section h3 {
+  margin: 0 0 8px 0;
+  color: #3b82f6;
+  font-size: 1.1rem;
+}
+
 #prestige-btn {
   background: var(--accent);
   font-weight: 600;
