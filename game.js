@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="buy-generator-upgrade-btn" type="button">Generator x2</button>
   </div>
 
+  <div id="prestige-container">
+  <div id="prestige-info"></div>
+  <button id="prestige-btn" type="button" disabled>Prestige Reset</button>
+  </div>
+
   <div id="layers-container"></div>
 `;
 
@@ -37,6 +42,7 @@ document.getElementById('click-btn').onclick = () => game.currencies.click();
 document.getElementById('buy-generator-btn').onclick = () => game.currencies.buyGenerator();
 document.getElementById('buy-click-upgrade-btn').onclick = () => game.currencies.buyClickUpgrade();
 document.getElementById('buy-generator-upgrade-btn').onclick = () => game.currencies.buyGeneratorUpgrade();
+document.getElementById('prestige-btn').onclick = () => game.currencies.prestigeReset();
 
 
   updateUI(game);
