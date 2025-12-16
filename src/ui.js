@@ -37,7 +37,6 @@ export function updateUI(game) {
   // 7. Prestige
   const prestigeInfo = document.getElementById('prestige-info');
   const prestigeBtn = document.getElementById('prestige-btn');
-  const currencies = game.currencies;
   
   prestigeInfo.innerHTML = `
     <div>Prestige Points: ${currencies.prestigePoints}</div>
