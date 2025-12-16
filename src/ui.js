@@ -49,21 +49,22 @@ export function updateUI(game) {
 
   // 8. Layers Container 
   const layersContainer = document.getElementById('layers-container');
-  const layers = game.layers;
-  const unlockedLayers = layers.unlockedLayers;
+  const layers = game.layers.unlockedLayers;
   
-  if (unlockedLayers.length > 1) {
-    layersContainer.innerHTML = unlockedLayers.map(layer => `
-      <div class="layer-section">
-        <h3>Layer ${layer.id}: ${layer.name}</h3>
-        <div>${layer.currency.points} (${layer.currency.totalProductionPerSecond.toFixed(1)}/s)</div>
-        <button onclick="game.layers.layers[${layer.id-1}].currency.buyGenerator()">
-          Generator kaufen (${layer.currency.generatorCost})
-        </button>
-      </div>
-    `).join('');
-  } else {
-    layersContainer.innerHTML = '<div>Neue Layers werden freigeschaltet...</div>';
-  }
+  layersContainer.innerHTML = layers
+    .filter(l => l.id === 2) // nur Layer 2 anzeigen
+    .map(layer => {
+      const c = layer.currency;
+      return `
+        <div class="layer-section">
+          <h3>Layer ${layer.id}: ${layer.name}</h3>
+          <div>Coins: ${c.points} (${c.totalProductionPerSecond?.toFixed ? c.totalProductionPerSecond.toFixed(1) : 0}/s)</div>
+          <button type="button" onclick="game.layers.getCurrencyForLayer(${layer.id}).buyGenerator()">
+            Generator kaufen (${c.generatorCost})
+          </button>
+        </div>
+      `;
+    })
+    .join('') || '<div>Neue Layers werden freigeschaltet…</div>';
 
 }
