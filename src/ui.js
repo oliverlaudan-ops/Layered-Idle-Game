@@ -8,9 +8,9 @@ export function updateUI(game) {
 
   // 2. Currency Display: Gesamt-Prod inkl. Prestige
   document.getElementById('currency-display').textContent =
-    `Punkte: ${currencies.points} (Prod: ${currencies.productionPerSecond}/s)`;
+  `Punkte: ${currencies.points} (Prod: ${currencies.totalProductionPerSecond.toFixed(1)}/s)`;
 
-  // 3. Generators: EFFektive Produktion pro Generator zeigen
+  // 3. Generators: Effektive Produktion pro Generator zeigen
   const generatorsInfo = document.getElementById('generators-info');
   const genCost = currencies.generatorCost;
   const effectiveGenProd = currencies.baseProduction * currencies.generatorMultiplier * currencies.prestigeMultiplier;
