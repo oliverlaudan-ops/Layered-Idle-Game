@@ -1,1 +1,1 @@
-# Layered-Idle-Game
+# Idle-Game-v2
