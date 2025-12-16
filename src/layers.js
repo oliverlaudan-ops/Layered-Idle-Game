@@ -1,21 +1,26 @@
+import { CurrencyManager } from './currencies.js'; // ✅ wichtig
+
 export class LayerManager {
   constructor() {
     this.layers = [
       {
         id: 1,
         name: "Points",
-        currency: 'points',  // Verweis auf Layer 1 CurrencyManager
+        type: "base",
         unlocked: true,
-        generators: [],
-        unlockRequirement: 0
+        unlockRequirement: 0,
+        get currency() {
+          // Layer 1 benutzt den Haupt-CurrencyManager aus game
+          return game.currencies;
+        }
       },
       {
         id: 2,
-        name: "Prestige Coins", 
-        currency: new CurrencyManager(),  // EIGENE CurrencyManager!
+        name: "Prestige Coins",
+        type: "prestige-layer",
         unlocked: false,
-        unlockRequirement: 10,  // 10 Prestige Points
-        generators: []
+        unlockRequirement: 10, // z.B. 10 Prestige Points
+        currency: new CurrencyManager() // eigener CurrencyManager für Layer 2
       }
     ];
   }
@@ -33,8 +38,8 @@ export class LayerManager {
     return this.layers.filter(layer => layer.unlocked);
   }
 
-  getCurrentLayerCurrency(layerId) {
-    const layer = this.layers.find(l => l.id === layerId);
+  getCurrencyForLayer(id) {
+    const layer = this.layers.find(l => l.id === id);
     return layer ? layer.currency : null;
   }
 }
