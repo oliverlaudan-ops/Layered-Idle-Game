@@ -3,9 +3,9 @@
  * Alle Rendering- und Formatierungsfunktionen
  */
 
-import gameState from './game-state.js';
-import { getEffectivePrestigeBonus } from './prestige.js';
-import achievementManager from './achievement-manager.js'; // ← NEU
+import gameState from '../modules/game-state.js';
+import { getEffectivePrestigeBonus } from '../modules/prestige.js';
+import achievementManager from '../modules/achievement-manager.js';
 
 // Achievement-Notification Queue
 let achievementQueue = [];
