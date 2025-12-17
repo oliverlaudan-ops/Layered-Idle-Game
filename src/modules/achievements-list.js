@@ -1,1 +1,2 @@
 // Achievement-Definitionen
+export default [];
