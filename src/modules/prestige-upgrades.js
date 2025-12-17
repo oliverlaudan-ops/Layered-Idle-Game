@@ -1,3 +1,3 @@
 // Prestige Upgrade-Definitionen
-export PrestigeUpgrade;
+export class PrestigeUpgrade{};
 export default [];
