@@ -563,7 +563,7 @@ export function renderAchievements(game) {
   
   profileBox.innerHTML = `
     <div class="profile-row">
-      <div><strong>Spielzeit (aktuelle Session)</strong><span>${formatPlaytime(playSeconds)}</span></div>
+      <div><strong>Spielzeit (aktuelle Session) </strong><span>${formatPlaytime(playSeconds)}</span></div>
       <div><strong>Gesamt-Klicks </strong><span>${formatAmount(totalClicks)}</span></div>
       <div><strong>Prestiges </strong><span>${prestigeCount}</span></div>
       <div><strong>Prestige-Punkte gesamt </strong><span>${totalPrestige}</span></div>
