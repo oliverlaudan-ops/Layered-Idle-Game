@@ -1,16 +1,17 @@
-/**
- * core.js
- * Kernspiellogik ohne DOM-Manipulation
- */
+/** src/modules/core.js
+Kern-Logik
+**/
 
+// Modul-Import
 import gameState from './game-state.js';
 import resourcesList from './resources-def.js';
 import upgradesList from './upgrades-def.js';
 import researchUpgradesList from './research-def.js';
 import prestigeUpgradesList, { PrestigeUpgrade } from './prestige-upgrades.js';
 import { calculatePrestigePoints, doPrestige, getEffectivePrestigeBonus } from './prestige.js';
-import achievementManager from './achievement-manager.js'; // ← NEU
+import achievementManager from './achievement-manager.js';
 
+// Konstruktor
 class Game {
   constructor() {
     this.resources = {};
