@@ -1,7 +1,7 @@
 // main.js – Entry Point (v2)
 
 import Game from './src/modules/core.js';
-import { initializeGame } from './src/ui/ui-init.js';
+import { initializeGame } from './ui/ui-init.js';
 
 import gameState from './src/modules/game-state.js';
 import {
