@@ -77,32 +77,27 @@ function setupSaveButtons(game) {
       }
       
       console.log('🔴 ========== RESET GESTARTET ==========');
-      console.log('Schritt 1: Game Loop stoppen...');
+      console.log('Schritt 1: Setze Reset-Flag...');
       
-      // 1. Game Loop stoppen
+      // WICHTIG: Flag setzen BEVOR wir localStorage löschen
+      // sessionStorage überlebt den Reload aber nicht das Schließen des Tabs
+      sessionStorage.setItem('gameResetInProgress', 'true');
+      console.log('✅ Reset-Flag gesetzt');
+      
+      console.log('Schritt 2: Game Loop stoppen...');
       game.stopGameLoop();
       console.log('✅ Game Loop gestoppt');
       
-      console.log('Schritt 2: GameState zurücksetzen...');
-      
-      // 2. GameState zurücksetzen (löscht localStorage und setzt Defaults)
-      gameState.reset();
-      console.log('✅ GameState zurückgesetzt');
-      
-      console.log('Schritt 3: Sicherheits-Check localStorage...');
-      console.log('localStorage nach Reset:', localStorage.getItem('gameState'));
-      
-      // 3. Zusätzliche Sicherheit: localStorage nochmal clearen
+      console.log('Schritt 3: LocalStorage komplett löschen...');
       localStorage.clear();
-      console.log('✅ localStorage komplett gelöscht');
+      console.log('✅ localStorage gelöscht');
+      console.log('🔍 Verifikation:', localStorage.getItem('gameState'));
       
       console.log('🟬 ========== RESET ABGESCHLOSSEN ==========');
-      console.log('🔄 Lade Seite neu in 500ms...');
+      console.log('🔄 Lade Seite neu SOFORT...');
       
-      // 4. Seite neu laden nach kurzer Verzögerung
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      // Sofort neu laden ohne Verzögerung
+      window.location.reload();
     });
   }
 }
@@ -183,9 +178,22 @@ function updateActionsStickyTop() {
 // ========== Autosave ==========
 
 let autosaveCounter = 0;
+let autosaveInterval = null;
 
 function setupAutosave(game) {
-  setInterval(() => {
+  // Autosave nur starten wenn kein Reset aktiv ist
+  if (sessionStorage.getItem('gameResetInProgress') === 'true') {
+    console.log('⚠️ Autosave deaktiviert - Reset läuft');
+    return;
+  }
+  
+  autosaveInterval = setInterval(() => {
+    // Prüfe nochmal ob Reset aktiv ist
+    if (sessionStorage.getItem('gameResetInProgress') === 'true') {
+      console.log('⚠️ Autosave übersprungen - Reset läuft');
+      return;
+    }
+    
     game.syncToState();
     gameState.save();
     autosaveCounter++;
@@ -223,6 +231,13 @@ export function setupKeyboardShortcuts(game) {
     // Strg+S: Manuelles Speichern
     if (e.ctrlKey && e.key === 's') {
       e.preventDefault();
+      
+      // Nicht speichern während Reset
+      if (sessionStorage.getItem('gameResetInProgress') === 'true') {
+        showNotification('Speichern während Reset deaktiviert.');
+        return;
+      }
+      
       game.syncToState();
       gameState.save();
       showNotification('Spiel gespeichert!');
@@ -285,6 +300,15 @@ function showNotification(message, duration = 2000) {
 
 export function initializeGame(game) {
   console.log('🎮 Initialisiere Spiel...');
+  
+  // Prüfe ob Reset-Flag gesetzt ist
+  const resetInProgress = sessionStorage.getItem('gameResetInProgress');
+  if (resetInProgress === 'true') {
+    console.log('🔴 RESET ERKANNT - Lösche localStorage nochmal zur Sicherheit...');
+    localStorage.clear();
+    sessionStorage.removeItem('gameResetInProgress');
+    console.log('✅ Reset-Flag entfernt, localStorage gelöscht');
+  }
   
   // 1. Game-Daten laden
   game.setupGameData();
