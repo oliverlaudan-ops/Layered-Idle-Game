@@ -32,16 +32,17 @@ export function setupDOM(game) {
   // Autosave einrichten
   setupAutosave(game);
 
-  setupSaveButtons(game); // <— NEU
+  setupSaveButtons(game);
 }
 
 // ========= Utility-Buttons ======
 function setupSaveButtons(game) {
   const exportBtn = document.getElementById('exportBtn');
   const importBtn = document.getElementById('importBtn');
-  const resetBtn  = document.getElementById('resetBtn');
+  const resetBtn = document.getElementById('resetBtn');
   const saveField = document.getElementById('saveString');
-   // Export-Button 
+  
+  // Export-Button
   if (exportBtn) {
     exportBtn.addEventListener('click', () => {
       game.syncToState();
@@ -51,6 +52,7 @@ function setupSaveButtons(game) {
       showNotification('Spielstand exportiert (in Feld & evtl. Zwischenablage).');
     });
   }
+  
   // Import-Button
   if (importBtn) {
     importBtn.addEventListener('click', () => {
@@ -58,42 +60,32 @@ function setupSaveButtons(game) {
       try {
         gameState.import(saveField.value.trim());
         game.syncFromState();
-        game.recalculateResourceBonuses();
         renderAll(game);
         showNotification('Spielstand importiert!');
       } catch (e) {
         showNotification('Fehler: Ungültiger Spielstand.');
+        console.error(e);
       }
     });
   }
 
   if (resetBtn) {
-  // ui-init.js – im setupSaveButtons(game)
-  resetBtn.addEventListener('click', () => {
-    if (!confirm('Spiel wirklich vollständig zurücksetzen?')) return;
-  
-      localStorage.removeItem('gameState'); // nur hier
+    resetBtn.addEventListener('click', () => {
+      if (!confirm('Spiel wirklich vollständig zurücksetzen?')) return;
     
+      localStorage.removeItem('gameState');
       gameState.reset();
-      game.resources = {};
-      game.upgrades = [];
-      game.prestigeUpgrades = [];
-      game.totalClicks = 0;
-      game.prestigeCount = 0;
-      game.totalPrestigePoints = 0;
-      game.achievementPrestigeBonus = 1;
-      game.startTime = Date.now();
-    
+      
+      // Game neu initialisieren
       game.setupGameData();
       game.syncFromState();
-      game.recalculateResourceBonuses();
-    
+      
       game.syncToState();
       gameState.save();
       renderAll(game);
       alert('Spiel vollständig zurückgesetzt!');
-      });
-    }
+    });
+  }
 }
 
 // ========== Tab-System ==========
@@ -125,6 +117,16 @@ function setupTabs() {
           achievementsContainer.style.display = 'block';
         } else {
           achievementsContainer.style.display = 'none';
+        }
+      }
+      
+      // Prestige-Container
+      const prestigeContainer = document.getElementById('prestigeContainer');
+      if (prestigeContainer) {
+        if (target === 'prestige') {
+          prestigeContainer.style.display = 'block';
+        } else {
+          prestigeContainer.style.display = 'none';
         }
       }
     });
@@ -182,7 +184,11 @@ export function setupGameLoop(game) {
   // Callback für Tick-Updates setzen
   game.onTick = () => {
     renderStatsBar(game);
-    renderUpgrades(game);
+    // Upgrades nur rendern wenn Tab aktiv ist (Performance)
+    const upgradeGrid = document.getElementById('upgradeGrid');
+    if (upgradeGrid && upgradeGrid.style.display !== 'none') {
+      renderUpgrades(game);
+    }
   };
   
   // Game Loop starten
@@ -197,7 +203,7 @@ export function setupKeyboardShortcuts(game) {
     if (e.ctrlKey && e.key === 's') {
       e.preventDefault();
       game.syncToState();
-      gameState.save(); // ← WICHTIG!
+      gameState.save();
       showNotification('Spiel gespeichert!');
     }
     
@@ -208,15 +214,11 @@ export function setupKeyboardShortcuts(game) {
       showNotification('UI aktualisiert!');
     }
     
-    // Zahlen 1-9: Schnell-Aktionen für Ressourcen
-    if (e.key >= '1' && e.key <= '9') {
-      const index = parseInt(e.key) - 1;
-      const resources = Object.values(game.resources).filter(r => r.unlocked);
-      
-      if (resources[index]) {
-        const btn = document.getElementById(resources[index].id + 'Btn');
-        if (btn) btn.click();
-      }
+    // Leertaste: Energie klicken
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      game.handleClick('energy');
+      renderStatsBar(game);
     }
   });
 }
@@ -278,7 +280,6 @@ export function initializeGame(game) {
   game.onAchievementUnlock = (achievement) => {
     showAchievementNotification(achievement);
     renderAchievements(game);
-    game.recalculateResourceBonuses();
     renderAll(game);
   };
   
