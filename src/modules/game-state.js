@@ -15,9 +15,12 @@ export class GameState {
       try {
         savedState = JSON.parse(storageValue);
         Object.assign(this, savedState);
+        console.log('📥 Spielstand aus localStorage geladen');
       } catch (e) {
         console.warn('Konnte gespeicherten State nicht laden:', e);
       }
+    } else {
+      console.log('ℹ️ Kein Spielstand gefunden - starte neu');
     }
 
     // Initialisiere mit Defaults falls nichts geladen wurde
@@ -39,6 +42,18 @@ export class GameState {
     
     // Offline-Tracking
     this.lastOnline = this.lastOnline ?? Date.now();
+    
+    // Wenn resources leer ist, initialisiere mit Startwerten
+    if (Object.keys(this.resources).length === 0) {
+      console.log('ℹ️ Ressourcen sind leer - initialisiere mit Startwerten');
+      for (const def of resourceDefinitions) {
+        this.resources[def.id] = {
+          amount: def.startAmount || 0,
+          totalEarned: 0,
+          unlocked: def.unlocked || false
+        };
+      }
+    }
   }
 
   // Spielstand speichern
@@ -51,7 +66,7 @@ export class GameState {
 
   // Spielstand zurücksetzen
   reset() {
-    console.log('🔴 GameState.reset() wird ausgeführt...');
+    console.log('🔴 ========== RESET GESTARTET ==========');
     
     // Ressourcen mit Startwerten initialisieren
     this.resources = {};
@@ -62,9 +77,11 @@ export class GameState {
         unlocked: def.unlocked || false
       };
     }
+    console.log('✅ Ressourcen zurückgesetzt:', Object.keys(this.resources).length);
     
-    // ALLE Upgrades zurücksetzen (nicht nur leeres Object)
+    // ALLE Upgrades zurücksetzen
     this.upgrades = {};
+    console.log('✅ Upgrades zurückgesetzt (leer)');
     
     // Alle anderen Daten zurücksetzen
     this.completedResearch = [];
@@ -77,13 +94,15 @@ export class GameState {
     this.achievementPrestigeBonus = 1;
     this.startTime = Date.now();
     this.lastOnline = Date.now();
+    console.log('✅ Alle Tracking-Daten zurückgesetzt');
     
     // LocalStorage komplett löschen - OHNE danach zu speichern!
     console.log('🗑️ Lösche localStorage komplett...');
     localStorage.clear();
     
-    console.log('✅ Reset abgeschlossen - localStorage ist leer');
-    console.log('ℹ️ localStorage nach Reset:', localStorage.getItem('gameState'));
+    console.log('✅ localStorage gelöscht');
+    console.log('🔍 Verifikation - localStorage.getItem("gameState"):', localStorage.getItem('gameState'));
+    console.log('🟬 ========== RESET ABGESCHLOSSEN ==========');
   }
 
   // Export als Base64
