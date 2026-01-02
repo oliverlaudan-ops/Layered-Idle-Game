@@ -301,14 +301,8 @@ function showNotification(message, duration = 2000) {
 export function initializeGame(game) {
   console.log('🎮 Initialisiere Spiel...');
   
-  // Prüfe ob Reset-Flag gesetzt ist
-  const resetInProgress = sessionStorage.getItem('gameResetInProgress');
-  if (resetInProgress === 'true') {
-    console.log('🔴 RESET ERKANNT - Lösche localStorage nochmal zur Sicherheit...');
-    localStorage.clear();
-    sessionStorage.removeItem('gameResetInProgress');
-    console.log('✅ Reset-Flag entfernt, localStorage gelöscht');
-  }
+  // gameState Constructor hat bereits Reset-Flag geprüft und ggf. gelöscht
+  // Hier müssen wir nichts mehr machen
   
   // 1. Game-Daten laden
   game.setupGameData();
