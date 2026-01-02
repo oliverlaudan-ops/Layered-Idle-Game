@@ -23,13 +23,13 @@ class AchievementManager {
   }
 
   loadAchievements() {
-    this.achievements = achievementsList.map(ach => {
-      const achievement = Object.assign(
-        Object.create(Object.getPrototypeOf(ach)), 
-        ach
-      );
-      return achievement;
+    // Erstelle richtige Achievement-Instanzen aus der Liste
+    this.achievements = achievementsList.map(achDef => {
+      // Erstelle neue Achievement-Instanz mit den Definitionen
+      return new Achievement(achDef);
     });
+    
+    console.log(`✅ ${this.achievements.length} Achievements geladen`);
   }
 
   checkAll(game) {
