@@ -48,7 +48,8 @@ constructor() {
     // Offline-Tracking
     this.lastOnline = this.lastOnline ?? Date.now();
 
-    this.save();
+    // NICHT mehr automatisch speichern beim Init
+    // this.save();
   }
 
 
