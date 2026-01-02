@@ -72,29 +72,37 @@ function setupSaveButtons(game) {
 
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      if (!confirm('Spiel wirklich vollständig zurücksetzen? Alle Daten gehen verloren!')) return;
-    
-      console.log('🔴 RESET GESTARTET');
-      console.log('Vor Reset - localStorage:', localStorage.getItem('gameState'));
+      if (!confirm('🚨 WARNUNG: Spiel wirklich vollständig zurücksetzen?\n\nAlle Daten werden gelöscht:\n- Ressourcen\n- Upgrades\n- Forschung\n- Prestige-Punkte\n- Achievements\n\nDieser Vorgang kann nicht rückgängig gemacht werden!')) {
+        return;
+      }
       
-      // Game Loop stoppen
+      console.log('🔴 ========== RESET GESTARTET ==========');
+      console.log('Schritt 1: Game Loop stoppen...');
+      
+      // 1. Game Loop stoppen
       game.stopGameLoop();
+      console.log('✅ Game Loop gestoppt');
       
-      // GameState zurücksetzen
+      console.log('Schritt 2: GameState zurücksetzen...');
+      
+      // 2. GameState zurücksetzen (löscht localStorage und setzt Defaults)
       gameState.reset();
+      console.log('✅ GameState zurückgesetzt');
       
-      console.log('Nach gameState.reset() - localStorage:', localStorage.getItem('gameState'));
+      console.log('Schritt 3: Sicherheits-Check localStorage...');
+      console.log('localStorage nach Reset:', localStorage.getItem('gameState'));
       
-      // Sicherheitshalber nochmal komplett löschen
+      // 3. Zusätzliche Sicherheit: localStorage nochmal clearen
       localStorage.clear();
+      console.log('✅ localStorage komplett gelöscht');
       
-      console.log('Nach localStorage.clear():', localStorage.getItem('gameState'));
-      console.log('🟢 RESET ABGESCHLOSSEN - Lade Seite neu...');
+      console.log('🟬 ========== RESET ABGESCHLOSSEN ==========');
+      console.log('🔄 Lade Seite neu in 500ms...');
       
-      // Kurz warten damit die Console-Logs sichtbar sind
+      // 4. Seite neu laden nach kurzer Verzögerung
       setTimeout(() => {
         window.location.reload();
-      }, 100);
+      }, 500);
     });
   }
 }
