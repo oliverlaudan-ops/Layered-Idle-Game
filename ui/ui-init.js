@@ -74,13 +74,10 @@ function setupSaveButtons(game) {
     resetBtn.addEventListener('click', () => {
       if (!confirm('Spiel wirklich vollständig zurücksetzen? Alle Daten gehen verloren!')) return;
     
-      // Spiel-Loop stoppen
-      game.stopGameLoop();
+      // GameState zurücksetzen (setzt Initialwerte und speichert)
+      gameState.reset();
       
-      // LocalStorage KOMPLETT löschen
-      localStorage.clear();
-      
-      // Seite neu laden für frischen Start
+      // Seite neu laden damit alles frisch initialisiert wird
       window.location.reload();
     });
   }
